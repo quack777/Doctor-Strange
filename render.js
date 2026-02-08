@@ -77,34 +77,12 @@ function drawPortal(ctx, canvas, portalVideo, portal, mirrorX) {
 
   ctx.save();
   ctx.strokeStyle = "#ff9f1a";
-  ctx.lineWidth = Math.max(4, Math.min(8, radius * 0.06));
+  ctx.lineWidth = Math.max(4, Math.min(8, radius * 0.08));
   ctx.shadowColor = "#ffd166";
   ctx.shadowBlur = 10;
   ctx.beginPath();
   ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
   ctx.stroke();
-  ctx.restore();
-}
-
-function drawRingSprite(ctx, ringSprite, portal) {
-  if (!portal || !ringSprite || !ringSprite.complete) return;
-  const { center, radius } = portal;
-  const size = radius * 2.2;
-  const x = center.x - size / 2;
-  const y = center.y - size / 2;
-
-  const sw = ringSprite.naturalWidth || ringSprite.width;
-  const sh = ringSprite.naturalHeight || ringSprite.height;
-  if (!sw || !sh) return;
-
-  const side = Math.min(sw, sh);
-  const sx = (sw - side) / 2;
-  const sy = (sh - side) / 2;
-
-  ctx.save();
-  ctx.globalCompositeOperation = "screen";
-  ctx.globalAlpha = 0.9;
-  ctx.drawImage(ringSprite, sx, sy, side, side, x, y, size, size);
   ctx.restore();
 }
 
@@ -116,8 +94,7 @@ export function renderFrame({
   points,
   portal,
   lastPoint,
-  mirrorX,
-  ringSprite
+  mirrorX
 }) {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
@@ -125,7 +102,6 @@ export function renderFrame({
 
   const baseInfo = drawBase(ctx, canvas, video, mirrorX);
   drawPortal(ctx, canvas, portalVideo, portal, mirrorX);
-  drawRingSprite(ctx, ringSprite, portal);
   drawTrail(ctx, points);
   drawPoint(ctx, lastPoint);
 
