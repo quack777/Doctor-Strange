@@ -8,6 +8,7 @@ const canvas = document.getElementById("canvas");
 const statusEl = document.getElementById("status");
 const portalFile = document.getElementById("portalFile");
 const portalInfo = document.getElementById("portalInfo");
+const ringSprite = document.getElementById("ringSprite");
 const ctx = canvas.getContext("2d");
 
 const state = {
@@ -148,7 +149,8 @@ async function start() {
       points: state.points,
       portal: state.portal,
       lastPoint: state.lastPoint,
-      mirrorX: MIRROR_X
+      mirrorX: MIRROR_X,
+      ringSprite
     });
 
     if (state.portal && state.growPortal) {

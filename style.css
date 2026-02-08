@@ -67,7 +67,8 @@ body {
 }
 
 #video,
-#portalVideo {
+#portalVideo,
+#ringSprite {
   display: none;
 }
 
