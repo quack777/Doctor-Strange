@@ -8,7 +8,6 @@ const canvas = document.getElementById("canvas");
 const statusEl = document.getElementById("status");
 const portalFile = document.getElementById("portalFile");
 const portalInfo = document.getElementById("portalInfo");
-const ringSprite = document.getElementById("ringSprite");
 const ctx = canvas.getContext("2d");
 
 const state = {
@@ -80,6 +79,13 @@ function setupPortalGrow() {
       state.growPortal = true;
       e.preventDefault();
     }
+    if (e.code === "Escape") {
+      state.portal = null;
+      state.gestureLocked = false;
+      clearPoints();
+      setStatus("Draw a circle with your index finger");
+      e.preventDefault();
+    }
   });
   window.addEventListener("keyup", (e) => {
     if (e.code === "Space") {
@@ -149,8 +155,7 @@ async function start() {
       points: state.points,
       portal: state.portal,
       lastPoint: state.lastPoint,
-      mirrorX: MIRROR_X,
-      ringSprite
+      mirrorX: MIRROR_X
     });
 
     if (state.portal && state.growPortal) {
