@@ -54,6 +54,20 @@ function drawPoint(ctx, point) {
   ctx.restore();
 }
 
+function drawParticles(ctx, particles) {
+  if (!particles || particles.length === 0) return;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (const p of particles) {
+    const alpha = Math.max(0, p.life / p.ttl);
+    ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
 function drawBase(ctx, canvas, video, mirrorX) {
   const info = drawVideoCover(ctx, video, canvas, mirrorX);
   if (!info) {
@@ -94,7 +108,8 @@ export function renderFrame({
   points,
   portal,
   lastPoint,
-  mirrorX
+  mirrorX,
+  particles
 }) {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
@@ -102,6 +117,7 @@ export function renderFrame({
 
   const baseInfo = drawBase(ctx, canvas, video, mirrorX);
   drawPortal(ctx, canvas, portalVideo, portal, mirrorX);
+  drawParticles(ctx, particles);
   drawTrail(ctx, points);
   drawPoint(ctx, lastPoint);
 

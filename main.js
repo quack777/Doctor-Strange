@@ -15,7 +15,8 @@ const state = {
   lastPoint: null,
   portal: null,
   gestureLocked: false,
-  growPortal: false
+  growPortal: false,
+  particles: []
 };
 
 const MAX_POINTS = 60;
@@ -42,6 +43,40 @@ function addPoint(point) {
 function clearPoints() {
   state.points = [];
   state.lastPoint = null;
+}
+
+function emitParticles(origin) {
+  const count = 8;
+  for (let i = 0; i < count; i += 1) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 60 + Math.random() * 120;
+    const size = 1.5 + Math.random() * 3.5;
+    const ttl = 0.25 + Math.random() * 0.35;
+    const colorShift = Math.random() * 40;
+    state.particles.push({
+      x: origin.x,
+      y: origin.y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 40,
+      life: ttl,
+      ttl,
+      size,
+      r: 255,
+      g: 170 + colorShift,
+      b: 60
+    });
+  }
+}
+
+function updateParticles(dt) {
+  const gravity = 220;
+  for (const p of state.particles) {
+    p.vy += gravity * dt;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.life -= dt;
+  }
+  state.particles = state.particles.filter((p) => p.life > 0);
 }
 
 async function startWebcam() {
@@ -113,6 +148,7 @@ async function start() {
     (lm) => {
       const point = mapNormalizedToCanvas(lm, video, canvas, MIRROR_X);
       addPoint(point);
+      emitParticles(point);
       if (!state.gestureLocked) {
         const portal = detectCircle(state.points);
         if (portal) {
@@ -155,8 +191,11 @@ async function start() {
       points: state.points,
       portal: state.portal,
       lastPoint: state.lastPoint,
-      mirrorX: MIRROR_X
+      mirrorX: MIRROR_X,
+      particles: state.particles
     });
+
+    updateParticles(dt);
 
     if (state.portal && state.growPortal) {
       const growthPerSec = 180;
