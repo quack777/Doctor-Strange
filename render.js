@@ -100,6 +100,28 @@ function drawPortal(ctx, canvas, portalVideo, portal, mirrorX) {
   ctx.restore();
 }
 
+function drawRingSparks(ctx, portal) {
+  if (!portal) return;
+  const { center, radius } = portal;
+  const count = 36;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (let i = 0; i < count; i += 1) {
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
+    const jitter = (Math.random() - 0.5) * radius * 0.04;
+    const r = radius + jitter;
+    const x = center.x + Math.cos(angle) * r;
+    const y = center.y + Math.sin(angle) * r;
+    const size = 1 + Math.random() * 3.5;
+    const alpha = 0.4 + Math.random() * 0.6;
+    ctx.fillStyle = `rgba(255, ${180 + Math.random() * 60}, 60, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
 export function renderFrame({
   ctx,
   canvas,
@@ -117,6 +139,7 @@ export function renderFrame({
 
   const baseInfo = drawBase(ctx, canvas, video, mirrorX);
   drawPortal(ctx, canvas, portalVideo, portal, mirrorX);
+  drawRingSparks(ctx, portal);
   drawParticles(ctx, particles);
   drawTrail(ctx, points);
   drawPoint(ctx, lastPoint);
