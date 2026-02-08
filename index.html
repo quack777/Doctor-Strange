@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hand Drawn Portal MVP</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="status">Initializing webcam...</div>
+    <div id="controls">
+      <label class="file">
+        포탈 영상 선택
+        <input id="portalFile" type="file" accept="video/*" />
+      </label>
+      <span id="portalInfo">선택된 영상 없음</span>
+    </div>
+    <video id="video" autoplay playsinline muted></video>
+    <video id="portalVideo" autoplay playsinline loop muted></video>
+    <canvas id="canvas"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
